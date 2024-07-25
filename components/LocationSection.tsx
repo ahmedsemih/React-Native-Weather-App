@@ -1,11 +1,12 @@
 import moment from "moment";
-import { usePathname } from "expo-router";
+import { router, usePathname } from "expo-router";
 import { useEffect, useState } from "react";
 import { BookmarkIcon } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { COLORS } from "@/utils/constants";
+import { useSearchContext } from "@/contexts/SearchContext";
 
 type LocationSectionProps = {
   location: LocationType;
@@ -14,6 +15,7 @@ type LocationSectionProps = {
 
 const LocationSection = ({ location, lastUpdated }: LocationSectionProps) => {
   const pathname = usePathname();
+  const { setSearch } = useSearchContext();
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
@@ -40,10 +42,16 @@ const LocationSection = ({ location, lastUpdated }: LocationSectionProps) => {
     }
   };
 
+  const handlePressLocation = async () => {
+    await AsyncStorage.setItem("search", location.name);
+    setSearch(location.name);
+    router.push('/forecast');
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.location}>
-        <Text style={styles.name}>{location.name}</Text>
+        <Text onPress={handlePressLocation} style={styles.name}>{location.name}</Text>
         <TouchableOpacity onPress={handleToggleBookmark}>
           <BookmarkIcon
             color={COLORS.primary}
