@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FlatList, RefreshControl, StyleSheet, Text } from "react-native";
@@ -12,11 +13,13 @@ const BookmarksScreen = () => {
   const [bookmarks, setBookmarks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    getBookmarks();
-    setLoading(false);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      getBookmarks();
+      setLoading(false);
+    }, [])
+  );
 
   const getBookmarks = async () => {
     const bookmarks = (await AsyncStorage.getItem("bookmarks")) || "[]";
