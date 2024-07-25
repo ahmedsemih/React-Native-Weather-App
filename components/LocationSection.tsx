@@ -1,4 +1,5 @@
 import moment from "moment";
+import { usePathname } from "expo-router";
 import { useEffect, useState } from "react";
 import { BookmarkIcon } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -12,6 +13,7 @@ type LocationSectionProps = {
 };
 
 const LocationSection = ({ location, lastUpdated }: LocationSectionProps) => {
+  const pathname = usePathname();
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const LocationSection = ({ location, lastUpdated }: LocationSectionProps) => {
       const bookmarks = await AsyncStorage.getItem("bookmarks");
       setIsBookmarked(!!bookmarks?.includes(location.name));
     })();
-  }, []);
+  }, [pathname]);
 
   const handleToggleBookmark = async () => {
     const bookmarks = await AsyncStorage.getItem("bookmarks");
