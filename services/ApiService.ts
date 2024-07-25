@@ -1,6 +1,8 @@
 import moment from "moment";
 
-export const getWeatherForecast = async (location: string) => {
+export const getWeatherForecast = async (
+  location: string
+): Promise<Forecast> => {
   try {
     const res = await fetch(
       `${process.env.EXPO_PUBLIC_API_URL}/forecast.json?key=${process.env.EXPO_PUBLIC_API_KEY}&q=${location}&days=3`
@@ -15,7 +17,9 @@ export const getWeatherForecast = async (location: string) => {
   }
 };
 
-export const getCurrentWeather = async (location: string) => {
+export const getCurrentWeather = async (
+  location: string
+): Promise<Omit<Forecast, "forecast">> => {
   try {
     const res = await fetch(
       `${process.env.EXPO_PUBLIC_API_URL}/current.json?key=${process.env.EXPO_PUBLIC_API_KEY}&q=${location}`
@@ -30,7 +34,9 @@ export const getCurrentWeather = async (location: string) => {
   }
 };
 
-export const getHistoricalWeather = async (location: string) => {
+export const getHistoricalWeather = async (
+  location: string
+): Promise<Omit<Forecast, "current">> => {
   try {
     const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
     const fiveDaysAgoFromYesterday = moment()
